@@ -55,9 +55,7 @@
                         src="chris-pfp.jpg" 
                         alt="Christopher Feuchter" 
                         class="w-full h-full object-cover" 
-                        onerror="this.onerror=null; this.src='chris-pfp.png';"
-                        onerror="this.onerror=null; this.src='chris-pfp.jpeg';"
-                        onerror="this.src='https://via.placeholder.com/400x400/3B82F6/FFFFFF?text=Christopher+Feuchter'"
+                        onerror="this.onerror=null; if(this.src.includes('.jpg')) { this.src='chris-pfp.png'; } else if(this.src.includes('.png')) { this.src='chris-pfp.jpeg'; } else { this.src='https://via.placeholder.com/400x400/3B82F6/FFFFFF?text=Christopher+Feuchter'; }"
                     >
                 </div>
             </div>
