@@ -1,5 +1,10 @@
 /* Custom CSS for Portfolio Website */
 
+/* Profile picture positioning */
+.profile-photo {
+    object-position: center 10%;
+}
+
 /* Smooth scrolling */
 html {
     scroll-behavior: smooth;
