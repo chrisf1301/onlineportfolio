@@ -8,103 +8,6 @@ function toggleMobileMenu() {
     }
 }
 
-// Close mobile menu when clicking on a link
-document.addEventListener('DOMContentLoaded', function() {
-    const mobileMenuLinks = document.querySelectorAll('#mobileMenu a');
-    mobileMenuLinks.forEach(link => {
-        link.addEventListener('click', () => {
-            const mobileMenu = document.getElementById('mobileMenu');
-            if (mobileMenu) {
-                mobileMenu.classList.add('hidden');
-            }
-        });
-    });
-});
-
-// Smooth scrolling for navigation links
-document.addEventListener('DOMContentLoaded', function() {
-    const navLinks = document.querySelectorAll('a[href^="#"]');
-    
-    navLinks.forEach(link => {
-        link.addEventListener('click', function(e) {
-            e.preventDefault();
-            
-            const targetId = this.getAttribute('href');
-            const targetSection = document.querySelector(targetId);
-            
-            if (targetSection) {
-                const offsetTop = targetSection.offsetTop - 80; // Account for fixed navigation
-                
-                window.scrollTo({
-                    top: offsetTop,
-                    behavior: 'smooth'
-                });
-            }
-        });
-    });
-});
-
-// Active navigation highlighting
-window.addEventListener('scroll', function() {
-    const sections = document.querySelectorAll('section[id]');
-    const navLinks = document.querySelectorAll('nav a[href^="#"]');
-    
-    let current = '';
-    
-    sections.forEach(section => {
-        const sectionTop = section.offsetTop;
-        const sectionHeight = section.clientHeight;
-        
-        if (window.pageYOffset >= sectionTop - 100) {
-            current = section.getAttribute('id');
-        }
-    });
-    
-    navLinks.forEach(link => {
-        link.classList.remove('nav-active');
-        if (link.getAttribute('href') === `#${current}`) {
-            link.classList.add('nav-active');
-        }
-    });
-});
-
-// Form submission handling
-document.addEventListener('DOMContentLoaded', function() {
-    const contactForm = document.getElementById('contactForm');
-    
-    if (contactForm) {
-        contactForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            // Get form data
-            const formData = new FormData(this);
-            const name = formData.get('name');
-            const email = formData.get('email');
-            const subject = formData.get('subject');
-            const message = formData.get('message');
-            
-            // Basic validation
-            if (!name || !email || !subject || !message) {
-                showNotification('Please fill in all fields', 'error');
-                return;
-            }
-            
-            if (!isValidEmail(email)) {
-                showNotification('Please enter a valid email address', 'error');
-                return;
-            }
-            
-            // Simulate form submission (replace with actual form handling)
-            showNotification('Sending message...', 'info');
-            
-            setTimeout(() => {
-                showNotification('Message sent successfully! I\'ll get back to you soon.', 'success');
-                contactForm.reset();
-            }, 2000);
-        });
-    }
-});
-
 // Email validation
 function isValidEmail(email) {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -178,38 +81,6 @@ function showNotification(message, type = 'info') {
     }, 5000);
 }
 
-// Intersection Observer for animations
-document.addEventListener('DOMContentLoaded', function() {
-    const animatedElements = document.querySelectorAll('.card-hover, .hover-lift, .education-card');
-    
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('fade-in');
-                observer.unobserve(entry.target);
-            }
-        });
-    }, {
-        threshold: 0.1,
-        rootMargin: '0px 0px -50px 0px'
-    });
-    
-    animatedElements.forEach(element => {
-        observer.observe(element);
-    });
-});
-
-// Parallax effect for hero section
-window.addEventListener('scroll', function() {
-    const scrolled = window.pageYOffset;
-    const heroSection = document.querySelector('#home');
-    
-    if (heroSection) {
-        const rate = scrolled * -0.5;
-        heroSection.style.transform = `translateY(${rate}px)`;
-    }
-});
-
 // Typing effect for hero title
 function typeWriter(element, text, speed = 100) {
     let i = 0;
@@ -226,8 +97,126 @@ function typeWriter(element, text, speed = 100) {
     type();
 }
 
-// Initialize typing effect when page loads
+// Performance optimization: Debounce function
+function debounce(func, wait) {
+    let timeout;
+    return function executedFunction(...args) {
+        const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+    };
+}
+
+// Initialize all functionality when DOM is ready
 document.addEventListener('DOMContentLoaded', function() {
+    // Close mobile menu when clicking on a link
+    const mobileMenuLinks = document.querySelectorAll('#mobileMenu a');
+    mobileMenuLinks.forEach(link => {
+        link.addEventListener('click', () => {
+            const mobileMenu = document.getElementById('mobileMenu');
+            if (mobileMenu) {
+                mobileMenu.classList.add('hidden');
+            }
+        });
+    });
+
+    // Smooth scrolling for navigation links
+    const navLinks = document.querySelectorAll('a[href^="#"]');
+    navLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            const targetId = this.getAttribute('href');
+            const targetSection = document.querySelector(targetId);
+            
+            if (targetSection) {
+                const offsetTop = targetSection.offsetTop - 80; // Account for fixed navigation
+                
+                window.scrollTo({
+                    top: offsetTop,
+                    behavior: 'smooth'
+                });
+            }
+        });
+    });
+
+    // Form submission handling with Web3Forms
+    const contactForm = document.getElementById('contactForm');
+    if (contactForm) {
+        contactForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            // Get form data
+            const formData = new FormData(this);
+            const name = formData.get('name');
+            const email = formData.get('email');
+            const formSubject = formData.get('formSubject');
+            const message = formData.get('message');
+            
+            // Basic validation
+            if (!name || !email || !formSubject || !message) {
+                showNotification('Please fill in all fields', 'error');
+                return;
+            }
+            
+            if (!isValidEmail(email)) {
+                showNotification('Please enter a valid email address', 'error');
+                return;
+            }
+            
+            // Show sending notification
+            showNotification('Sending message...', 'info');
+            
+            try {
+                const response = await fetch('https://api.web3forms.com/submit', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    showNotification('Message sent successfully! I\'ll get back to you soon.', 'success');
+                    contactForm.reset();
+                } else {
+                    showNotification('Something went wrong. Please try again or email me directly.', 'error');
+                }
+            } catch (error) {
+                showNotification('Network error. Please try again or email me directly.', 'error');
+                console.error('Form submission error:', error);
+            }
+        });
+    }
+
+    // Scroll Animation Observer
+    const scrollAnimations = document.querySelectorAll('.fade-up, .fade-in, .slide-left, .slide-right, .scale-in');
+    
+    // First, add animate-ready class to enable animations (elements start visible by default)
+    scrollAnimations.forEach(element => {
+        element.classList.add('animate-ready');
+    });
+    
+    const scrollObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+                scrollObserver.unobserve(entry.target);
+            }
+        });
+    }, {
+        threshold: 0.05,
+        rootMargin: '0px 0px 0px 0px'
+    });
+    
+    // Observe all animation elements
+    scrollAnimations.forEach(element => {
+        scrollObserver.observe(element);
+    });
+
+    // Initialize typing effect for hero title
     const heroTitle = document.querySelector('#home h1 span');
     if (heroTitle) {
         const originalText = heroTitle.textContent;
@@ -235,12 +224,9 @@ document.addEventListener('DOMContentLoaded', function() {
             typeWriter(heroTitle, originalText, 150);
         }, 1000);
     }
-});
 
-// Lazy loading for images
-document.addEventListener('DOMContentLoaded', function() {
+    // Lazy loading for images
     const images = document.querySelectorAll('img[data-src]');
-    
     const imageObserver = new IntersectionObserver((entries, observer) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
@@ -253,16 +239,12 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     
     images.forEach(img => imageObserver.observe(img));
-});
 
-// Back to top button
-document.addEventListener('DOMContentLoaded', function() {
-    // Create back to top button
+    // Back to top button
     const backToTopButton = document.createElement('button');
     backToTopButton.innerHTML = '↑';
     backToTopButton.className = 'fixed bottom-8 right-8 w-12 h-12 bg-blue-600 text-white rounded-full shadow-lg hover:bg-blue-700 transition-all duration-300 opacity-0 pointer-events-none z-40';
     backToTopButton.setAttribute('aria-label', 'Back to top');
-    
     document.body.appendChild(backToTopButton);
     
     // Show/hide button based on scroll position
@@ -281,6 +263,42 @@ document.addEventListener('DOMContentLoaded', function() {
             behavior: 'smooth'
         });
     });
+});
+
+// Active navigation highlighting
+window.addEventListener('scroll', function() {
+    const sections = document.querySelectorAll('section[id]');
+    const navLinks = document.querySelectorAll('nav a[href^="#"]');
+    
+    let current = '';
+    
+    sections.forEach(section => {
+        const sectionTop = section.offsetTop;
+        const sectionHeight = section.clientHeight;
+        
+        if (window.pageYOffset >= sectionTop - 100) {
+            current = section.getAttribute('id');
+        }
+    });
+    
+    navLinks.forEach(link => {
+        link.classList.remove('nav-active');
+        if (link.getAttribute('href') === `#${current}`) {
+            link.classList.add('nav-active');
+        }
+    });
+});
+
+// Parallax effect for hero section
+window.addEventListener('scroll', function() {
+    const scrolled = window.pageYOffset;
+    const heroSection = document.querySelector('#home');
+    
+    if (heroSection) {
+        const rate = scrolled * -0.5;
+        heroSection.classList.add('hero-parallax');
+        heroSection.setAttribute('style', `transform: translateY(${rate}px)`);
+    }
 });
 
 // Keyboard navigation support
@@ -302,26 +320,6 @@ document.addEventListener('keydown', function(e) {
     }
 });
 
-// Performance optimization: Debounce scroll events
-function debounce(func, wait) {
-    let timeout;
-    return function executedFunction(...args) {
-        const later = () => {
-            clearTimeout(timeout);
-            func(...args);
-        };
-        clearTimeout(timeout);
-        timeout = setTimeout(later, wait);
-    };
-}
-
-// Apply debouncing to scroll events
-const debouncedScrollHandler = debounce(function() {
-    // Scroll-based functionality here
-}, 16); // 60fps
-
-window.addEventListener('scroll', debouncedScrollHandler);
-
 // Service Worker registration for PWA capabilities
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', function() {
@@ -337,4 +335,4 @@ if ('serviceWorker' in navigator) {
 
 // Console welcome message
 console.log('%cWelcome to my portfolio! 🚀', 'color: #3b82f6; font-size: 18px; font-weight: bold;');
-console.log('%cFeel free to explore the code and get in touch!', 'color: #6b7280; font-size: 14px;'); 
+console.log('%cFeel free to explore the code and get in touch!', 'color: #6b7280; font-size: 14px;');
