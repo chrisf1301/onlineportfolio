@@ -994,6 +994,89 @@ img {
     color: white;
 }
 
+/* ---------- AWS Leadership Section ---------- */
+.aws-grid {
+    display: grid;
+    grid-template-columns: 1.1fr 1.4fr;
+    gap: 32px;
+    align-items: flex-start;
+}
+
+.aws-summary {
+    padding: 24px;
+}
+
+.aws-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text-white);
+    margin-bottom: 12px;
+}
+
+.aws-text {
+    font-size: 14px;
+    color: var(--text-muted);
+    line-height: 1.7;
+    margin-bottom: 16px;
+}
+
+.aws-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.aws-deliverables {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+.aws-deliverable {
+    display: flex;
+    gap: 12px;
+    padding: 16px 18px;
+    background: var(--bg-card);
+    border-radius: 10px;
+    border: 1px solid var(--border);
+}
+
+.aws-deliverable-icon {
+    width: 32px;
+    height: 32px;
+    min-width: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    background: rgba(59, 130, 246, 0.12);
+    color: var(--accent);
+    font-size: 14px;
+}
+
+.aws-deliverable-text h4 {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-white);
+    margin-bottom: 4px;
+}
+
+.aws-deliverable-text p {
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.5;
+}
+
+@media (max-width: 900px) {
+    .aws-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .aws-deliverables {
+        grid-template-columns: 1fr;
+    }
+}
+
 /* ---------- Contact Section ---------- */
 .contact-grid {
     display: grid;
